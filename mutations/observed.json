@@ -1,0 +1,138 @@
+{
+  "ranAt": "2026-11-23T14:53:34.916Z",
+  "baselineBundle": "b8ce9e621871668468e4657da38221e3",
+  "restoredBundleMatches": true,
+  "killed": 9,
+  "total": 12,
+  "records": [
+    {
+      "id": "M01",
+      "what": "Walsh count uses AND instead of XOR of b·S(x) and a·x",
+      "file": "src/boolean/walsh.ts",
+      "owner": "npx vitest run -t \"counting agreements minus disagreements equals the butterfly\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > Metric definitions > counting agreements minus disagreements equals the butterfly, for every a and b of the Gold map"
+    },
+    {
+      "id": "M02",
+      "what": "NL formula drops the /2",
+      "file": "src/boolean/walsh.ts",
+      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > A. AES S-box (FIPS 197) > NL = 112 with max |W| = 32, δ = 4, degree 7"
+    },
+    {
+      "id": "M03",
+      "what": "DDT counts row a = 0",
+      "file": "src/boolean/ddt.ts",
+      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > A. AES S-box (FIPS 197) > NL = 112 with max |W| = 32, δ = 4, degree 7"
+    },
+    {
+      "id": "M04",
+      "what": "Möbius transform folds the wrong half (degree changes for AES)",
+      "file": "src/boolean/anf.ts",
+      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > A. AES S-box (FIPS 197) > NL = 112 with max |W| = 32, δ = 4, degree 7"
+    },
+    {
+      "id": "M05",
+      "what": "AES affine constant 0x63 omitted",
+      "file": "src/sboxes/aes.ts",
+      "owner": "npx vitest run -t \"generated table: S[00] = 63\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": false,
+      "result": "SURVIVED",
+      "evidence": ""
+    },
+    {
+      "id": "M06",
+      "what": "vectorial NL takes the max over masks instead of the min",
+      "file": "src/boolean/walsh.ts",
+      "owner": "npx vitest run -t \"vectorial NL is the MINIMUM over nonzero masks\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > Metric definitions > vectorial NL is the MINIMUM over nonzero masks (mask 0 would make every S-box 0)"
+    },
+    {
+      "id": "M07",
+      "what": "negative-claim sentence deleted from the Gold fixture",
+      "file": "src/ui/comparePanel.ts",
+      "owner": "npx playwright test --project=claims -g \"the negative claim: the APN Gold map scores optimal\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:122:3 › displayed claims › the negative claim: the APN Gold map scores optimal on every check, and the page says that is not a cipher (5.5s)"
+    },
+    {
+      "id": "M08",
+      "what": "a check inside the fixture broken: δ must be strictly below the bound to count as optimal",
+      "file": "src/boolean/metrics.ts",
+      "owner": "npx playwright test --project=claims -g \"the negative claim: the APN Gold map scores optimal\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": false,
+      "result": "SURVIVED",
+      "evidence": ""
+    },
+    {
+      "id": "M09",
+      "what": "editing the table no longer retires the old measurements",
+      "file": "src/ui/comparePanel.ts",
+      "owner": "npx playwright test --project=claims -g \"editing the table retires the measurements\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:152:3 › displayed claims › editing the table retires the measurements, and the page says it did (5.6s)"
+    },
+    {
+      "id": "M10",
+      "what": "re-selecting the same S-box re-renders (no-op guard removed)",
+      "file": "src/ui/picker.ts",
+      "owner": "npx playwright test --project=claims -g \"re-selecting the same S-box does not retire a current result\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:164:3 › displayed claims › re-selecting the same S-box does not retire a current result (5.7s)"
+    },
+    {
+      "id": "M11",
+      "what": "toy-cipher key recovery forgets to XOR the plaintext back out",
+      "file": "src/boolean/toycipher.ts",
+      "owner": "npx playwright test --project=claims -g \"the toy cipher: the recovered key really re-encrypts\"",
+      "ownerPassedUnmutated": true,
+      "result": "DOES NOT BUILD"
+    },
+    {
+      "id": "M12",
+      "what": "gate bite: muted text token darkened below 4.5:1",
+      "file": "src/style.css",
+      "owner": "npx playwright test --project=a11y -g \"dark theme$\"",
+      "ownerPassedUnmutated": true,
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [a11y] › e2e/a11y.spec.ts:28:3 › no WCAG A/AA violations in dark theme (1.7s)"
+    }
+  ]
+}

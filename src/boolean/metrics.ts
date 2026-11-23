@@ -39,11 +39,13 @@ export function deltaBound(n: number, m: number): number {
 export function nonlinearityMetric(s: SBox): MetricResult & { mask: number; inputMask: number; maxW: number } {
   const r = nonlinearity(s);
   const { bound, text } = nlBound(s.n, s.m);
-  const tone: Tone = r.nl === 0 ? 'alarm' : r.nl >= bound ? 'optimal' : 'ok';
+  // One comparison decides both the tone and the words, so they cannot disagree.
+  const meets = r.nl >= bound;
+  const tone: Tone = r.nl === 0 ? 'alarm' : meets ? 'optimal' : 'ok';
   const verdict =
     r.nl === 0
       ? 'ALARM — some component is affine: a linear approximation holds with certainty'
-      : r.nl >= bound
+      : meets
         ? 'OPTIMAL — meets the bound'
         : `below the bound by ${bound - r.nl}`;
   return { key: 'nl', label: 'Nonlinearity', value: r.nl, bound, boundText: text, tone, verdict, ...r };
@@ -53,11 +55,13 @@ export function deltaMetric(s: SBox): MetricResult & { a: number; b: number } {
   const r = differentialUniformity(s);
   const bound = deltaBound(s.n, s.m);
   const worst = 1 << s.n;
-  const tone: Tone = r.delta >= worst ? 'alarm' : r.delta <= bound ? 'optimal' : 'ok';
+  // One comparison decides both the tone and the words, so they cannot disagree.
+  const meets = r.delta <= bound;
+  const tone: Tone = r.delta >= worst ? 'alarm' : meets ? 'optimal' : 'ok';
   const verdict =
     r.delta >= worst
       ? 'ALARM — some input difference fixes the output difference every time'
-      : r.delta <= bound
+      : meets
         ? s.m === s.n && r.delta === 2
           ? 'OPTIMAL — APN (δ = 2)'
           : 'OPTIMAL — meets the lower bound'
@@ -79,11 +83,12 @@ export function degreeMetric(s: SBox): MetricResult & { perCoordinate: number[] 
   const r = algebraicDegree(s);
   const balanced = isPermutation(s);
   const bound = balanced ? s.n - 1 : s.n;
-  const tone: Tone = r.degree <= 1 ? 'alarm' : r.degree >= bound ? 'optimal' : 'ok';
+  const meets = r.degree >= bound;
+  const tone: Tone = r.degree <= 1 ? 'alarm' : meets ? 'optimal' : 'ok';
   const verdict =
     r.degree <= 1
       ? 'ALARM — affine: every output bit is a linear function of the input'
-      : r.degree >= bound
+      : meets
         ? 'OPTIMAL — maximum possible degree'
         : `below the maximum by ${bound - r.degree}`;
   return {

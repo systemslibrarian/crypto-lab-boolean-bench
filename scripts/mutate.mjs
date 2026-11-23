@@ -22,8 +22,12 @@ import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const UNIT = (name) => `npx vitest run -t ${JSON.stringify(name)}`;
-const CLAIM = (name) => `npx playwright test --project=claims -g ${JSON.stringify(name)}`;
+// Both runners treat the name as a REGULAR EXPRESSION. An unescaped "[00]" in a
+// test name once matched nothing, ran zero tests and passed — the §4.1e hazard —
+// so names are escaped here AND every owner run must report a nonzero count.
+const re = (name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const UNIT = (name) => `npx vitest run -t ${JSON.stringify(re(name))}`;
+const CLAIM = (name) => `npx playwright test --project=claims -g ${JSON.stringify(re(name))}`;
 const A11Y = `npx playwright test --project=a11y -g "dark theme$"`;
 
 export const MUTATIONS = [
@@ -79,8 +83,8 @@ export const MUTATIONS = [
   {
     id: 'M08', what: 'a check inside the fixture broken: δ must be strictly below the bound to count as optimal',
     file: 'src/boolean/metrics.ts',
-    anchor: ": r.delta <= bound\n        ? s.m === s.n && r.delta === 2",
-    replace: ": r.delta < bound\n        ? s.m === s.n && r.delta === 2",
+    anchor: 'const meets = r.delta <= bound;',
+    replace: 'const meets = r.delta < bound;',
     owner: CLAIM('the negative claim: the APN Gold map scores optimal'),
   },
   {
@@ -101,7 +105,7 @@ export const MUTATIONS = [
     id: 'M11', what: 'toy-cipher key recovery forgets to XOR the plaintext back out',
     file: 'src/boolean/toycipher.ts',
     anchor: 'return invert(s)[c] ^ p;',
-    replace: 'return invert(s)[c];',
+    replace: 'return invert(s)[c] ^ (p >> s.n);', // p < 2^n, so this drops p and still compiles
     owner: CLAIM('the toy cipher: the recovered key really re-encrypts'),
   },
   {
@@ -126,6 +130,12 @@ const bundleHash = () => {
   for (const f of readdirSync(dir).sort()) h.update(f).update(readFileSync(join(dir, f)));
   return h.digest('hex');
 };
+/** Tests actually executed, from the runner's own summary line; 0 means the run proved nothing. */
+const testsRan = (out) => {
+  const v = /Tests\s+(?:\d+ failed \| )?(\d+) passed/.exec(out) ?? /Tests\s+(\d+) failed/.exec(out);
+  const p = /(\d+) passed \(/.exec(out) ?? /(\d+) failed/.exec(out);
+  return Number((v ?? p)?.[1] ?? 0);
+};
 const INFRA = /webServer|ECONNREFUSED|was not able to start|Error: Cannot find module|error TS\d+/;
 
 const wanted = process.argv.slice(2);
@@ -137,8 +147,9 @@ const baseHash = bundleHash();
 const ownerBaseline = new Map();
 for (const owner of new Set(list.map((m) => m.owner))) {
   const r = sh(owner);
-  ownerBaseline.set(owner, r.ok);
-  console.log(`baseline ${r.ok ? 'PASS' : 'FAIL'}  ${owner}`);
+  const n = testsRan(r.out);
+  ownerBaseline.set(owner, r.ok && n > 0);
+  console.log(`baseline ${r.ok ? 'PASS' : 'FAIL'} (${n} test${n === 1 ? '' : 's'})  ${owner}`);
 }
 
 const records = [];
