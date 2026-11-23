@@ -27,8 +27,9 @@ import { join } from 'node:path';
 // so names are escaped here AND every owner run must report a nonzero count.
 const re = (name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const UNIT = (name) => `npx vitest run -t ${JSON.stringify(re(name))}`;
-const CLAIM = (name) => `npx playwright test --project=claims -g ${JSON.stringify(re(name))}`;
-const A11Y = `npx playwright test --project=a11y -g "dark theme$"`;
+// --retries=0: a retry that passes on a lucky draw would read as a survivor.
+const CLAIM = (name) => `npx playwright test --project=claims --retries=0 -g ${JSON.stringify(re(name))}`;
+const A11Y = `npx playwright test --project=a11y --retries=0 -g "dark theme$"`;
 
 export const MUTATIONS = [
   {

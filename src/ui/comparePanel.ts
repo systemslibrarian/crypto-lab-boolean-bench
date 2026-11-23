@@ -75,9 +75,13 @@ export function renderComparePanel(root: HTMLElement): void {
   const toyOut = h('div', { class: 'output' });
   const toyBtn = h('button', { class: 'btn btn-primary', type: 'button', id: 'toy-run' }, 'Use it alone as a cipher: c = S(p ⊕ k)') as HTMLButtonElement;
   const runToy = (s: SBox): void => {
+    const mask = (1 << s.n) - 1;
     const key = randomKey(s.n);
-    const p1 = randomKey(s.n);
-    const p2 = (p1 + 1 + randomKey(s.n - 1)) & ((1 << s.n) - 1);
+    // p ≠ 0, so the "⊕ p" step of the recovery always changes the answer, and
+    // p2 ≠ p1, so the second pair is genuinely unseen.
+    const p1 = 1 + (randomKey(s.n) % mask);
+    const p2 = p1 === mask ? 1 : p1 + 1;
+
     const c1 = encryptToy(s, key, p1);
     const k = recoverKey(s, p1, c1);
     const c2 = encryptToy(s, key, p2);
