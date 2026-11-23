@@ -80,6 +80,10 @@ npm run test:mutations
 - **Mutation ledger: 12 of 12 mutations killed (six in the mathematics, five in what the page claims, one proving the accessibility gate bites)** — run by `scripts/mutate.mjs`, which records each mutation as a concrete patch and counts a kill only if the owning test passed unmutated, the patch applied, the bundle hash moved and the build succeeded. The run's own record is `mutations/observed.json`.
 - **Accessibility gate:** axe-core WCAG 2.1 A/AA plus arithmetic contrast, non-text contrast, reflow at 380px, scroll-region and focus oracles, over every driven state at desktop and phone width. Zero violations. Copied from crypto-lab-schnorr-forge and rewritten for this lab.
 
+## Claim-to-evidence table
+
+Every claim the page makes, with its execution mode, the test that pins it, the source and its interpretation limit, is in [claims.md](claims.md). Every number on this page is computed; there are no statistical demonstrations here.
+
 ## Negative claim
 
 > A perfect score here is not a secure cipher. Nonlinearity and differential uniformity bound two attacks on one round; they say nothing about the key schedule, the number of rounds or the rest of the design.
