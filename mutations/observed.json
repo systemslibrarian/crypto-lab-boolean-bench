@@ -1,8 +1,8 @@
 {
-  "ranAt": "2026-11-23T14:53:34.916Z",
-  "baselineBundle": "b8ce9e621871668468e4657da38221e3",
+  "ranAt": "2026-11-23T14:57:39.251Z",
+  "baselineBundle": "cc0ac0a318ee7c526cb9d1f88d9d90ec",
   "restoredBundleMatches": true,
-  "killed": 9,
+  "killed": 12,
   "total": 12,
   "records": [
     {
@@ -20,7 +20,7 @@
       "id": "M02",
       "what": "NL formula drops the /2",
       "file": "src/boolean/walsh.ts",
-      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "owner": "npx vitest run -t \"NL = 112 with max \\\\|W\\\\| = 32\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
@@ -31,7 +31,7 @@
       "id": "M03",
       "what": "DDT counts row a = 0",
       "file": "src/boolean/ddt.ts",
-      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "owner": "npx vitest run -t \"NL = 112 with max \\\\|W\\\\| = 32\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
@@ -42,7 +42,7 @@
       "id": "M04",
       "what": "Möbius transform folds the wrong half (degree changes for AES)",
       "file": "src/boolean/anf.ts",
-      "owner": "npx vitest run -t \"NL = 112 with max |W| = 32\"",
+      "owner": "npx vitest run -t \"NL = 112 with max \\\\|W\\\\| = 32\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
@@ -53,12 +53,12 @@
       "id": "M05",
       "what": "AES affine constant 0x63 omitted",
       "file": "src/sboxes/aes.ts",
-      "owner": "npx vitest run -t \"generated table: S[00] = 63\"",
+      "owner": "npx vitest run -t \"generated table: S\\\\[00\\\\] = 63\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
-      "ownerFailedMutated": false,
-      "result": "SURVIVED",
-      "evidence": ""
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "FAIL  src/boolean/kat.test.ts > A. AES S-box (FIPS 197) > generated table: S[00] = 63, S[01] = 7c, S[53] = ed and the published first row"
     },
     {
       "id": "M06",
@@ -75,40 +75,40 @@
       "id": "M07",
       "what": "negative-claim sentence deleted from the Gold fixture",
       "file": "src/ui/comparePanel.ts",
-      "owner": "npx playwright test --project=claims -g \"the negative claim: the APN Gold map scores optimal\"",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"the negative claim: the APN Gold map scores optimal\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
       "result": "KILLED",
-      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:122:3 › displayed claims › the negative claim: the APN Gold map scores optimal on every check, and the page says that is not a cipher (5.5s)"
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:122:3 › displayed claims › the negative claim: the APN Gold map scores optimal on every check, and the page says that is not a cipher (5.7s)"
     },
     {
       "id": "M08",
       "what": "a check inside the fixture broken: δ must be strictly below the bound to count as optimal",
       "file": "src/boolean/metrics.ts",
-      "owner": "npx playwright test --project=claims -g \"the negative claim: the APN Gold map scores optimal\"",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"the negative claim: the APN Gold map scores optimal\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
-      "ownerFailedMutated": false,
-      "result": "SURVIVED",
-      "evidence": ""
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:122:3 › displayed claims › the negative claim: the APN Gold map scores optimal on every check, and the page says that is not a cipher (565ms)"
     },
     {
       "id": "M09",
       "what": "editing the table no longer retires the old measurements",
       "file": "src/ui/comparePanel.ts",
-      "owner": "npx playwright test --project=claims -g \"editing the table retires the measurements\"",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"editing the table retires the measurements\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
       "result": "KILLED",
-      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:152:3 › displayed claims › editing the table retires the measurements, and the page says it did (5.6s)"
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:152:3 › displayed claims › editing the table retires the measurements, and the page says it did (5.5s)"
     },
     {
       "id": "M10",
       "what": "re-selecting the same S-box re-renders (no-op guard removed)",
       "file": "src/ui/picker.ts",
-      "owner": "npx playwright test --project=claims -g \"re-selecting the same S-box does not retire a current result\"",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"re-selecting the same S-box does not retire a current result\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
@@ -119,15 +119,18 @@
       "id": "M11",
       "what": "toy-cipher key recovery forgets to XOR the plaintext back out",
       "file": "src/boolean/toycipher.ts",
-      "owner": "npx playwright test --project=claims -g \"the toy cipher: the recovered key really re-encrypts\"",
+      "owner": "npx playwright test --project=claims --retries=0 -g \"the toy cipher: the recovered key really re-encrypts\"",
       "ownerPassedUnmutated": true,
-      "result": "DOES NOT BUILD"
+      "bundleHashChanged": true,
+      "ownerFailedMutated": true,
+      "result": "KILLED",
+      "evidence": "✘  1 [claims] › e2e/claims.spec.ts:141:3 › displayed claims › the toy cipher: the recovered key really re-encrypts the second pair (recomputed here) (5.6s)"
     },
     {
       "id": "M12",
       "what": "gate bite: muted text token darkened below 4.5:1",
       "file": "src/style.css",
-      "owner": "npx playwright test --project=a11y -g \"dark theme$\"",
+      "owner": "npx playwright test --project=a11y --retries=0 -g \"dark theme$\"",
       "ownerPassedUnmutated": true,
       "bundleHashChanged": true,
       "ownerFailedMutated": true,
