@@ -184,11 +184,26 @@ test.describe('displayed claims', () => {
     await expect(row.locator('[data-claim="degree-value"]')).toHaveText('7');
   });
 
+  test('a selected edited table refreshes in the degree panel after re-analysis', async ({ page }) => {
+    await boot(page, 'dark');
+    await openTab(page, /Side by side/);
+    await openTab(page, /Algebraic degree/);
+    await page.locator('#deg-sbox').selectOption('edited');
+    await expect(page.locator('[data-claim="degree"]')).toHaveText('1');
+    await openTab(page, /Side by side/);
+    await page.locator('#editor-table').fill('0 0 0 1');
+    await page.locator('#editor-analyse').click();
+    await openTab(page, /Algebraic degree/);
+    await expect(page.locator('[data-claim="degree"]')).toHaveText('2');
+  });
+
   test('the intro tells the affine S-box apart: A is ALARM on nonlinearity, B is not', async ({ page }) => {
     await boot(page, 'dark');
+    await expect(page.locator('#panel-intro')).toContainText('Predict before measuring');
     await page.locator('#intro-measure').click();
     await expect(page.locator('[data-verdict="intro-i-aff-nl"]')).toHaveAttribute('data-tone', 'alarm');
     await expect(page.locator('[data-verdict="intro-i-inv-nl"]')).not.toHaveAttribute('data-tone', 'alarm');
     await expect(page.locator('#panel-intro .callout-info')).toContainText('rotl(x, 1) ⊕ 3');
+    await expect(page.locator('#panel-intro .callout-info')).toContainText('followed by an affine transformation');
   });
 });

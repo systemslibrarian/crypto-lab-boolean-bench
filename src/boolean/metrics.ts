@@ -81,13 +81,13 @@ export function deltaMetric(s: SBox): MetricResult & { a: number; b: number } {
 
 export function degreeMetric(s: SBox): MetricResult & { perCoordinate: number[] } {
   const r = algebraicDegree(s);
-  const balanced = isPermutation(s);
-  const bound = balanced ? s.n - 1 : s.n;
+  const permutationBound = s.n > 1 && isPermutation(s);
+  const bound = permutationBound ? s.n - 1 : s.n;
   const meets = r.degree >= bound;
   const tone: Tone = r.degree <= 1 ? 'alarm' : meets ? 'optimal' : 'ok';
   const verdict =
     r.degree <= 1
-      ? 'ALARM — affine: every output bit is a linear function of the input'
+      ? 'ALARM — affine: every output bit is an affine function of the input'
       : meets
         ? 'OPTIMAL — maximum possible degree'
         : `below the maximum by ${bound - r.degree}`;
@@ -96,7 +96,7 @@ export function degreeMetric(s: SBox): MetricResult & { perCoordinate: number[] 
     label: 'Algebraic degree',
     value: r.degree,
     bound,
-    boundText: balanced ? `≤ ${bound} (n − 1 for a permutation)` : `≤ ${bound}`,
+    boundText: permutationBound ? `≤ ${bound} (n − 1 for a permutation)` : `≤ ${bound}`,
     tone,
     verdict,
     perCoordinate: r.perCoordinate,

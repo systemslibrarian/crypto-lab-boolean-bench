@@ -14,24 +14,27 @@ export function sboxPicker(
   filter: (s: SBox) => boolean = () => true,
 ): { root: HTMLElement; select: HTMLSelectElement; current: () => SBox } {
   const select = h('select', { id, class: 'select' }) as HTMLSelectElement;
-  let currentId = initial;
+  let selection = allSBoxes().find((s) => s.id === initial)!;
   const fill = (): void => {
-    const keep = currentId;
+    const choices = allSBoxes().filter(filter);
     select.replaceChildren(
-      ...allSBoxes()
-        .filter(filter)
-        .map((s) => h('option', { value: s.id }, s.name)),
+      ...choices.map((s) => h('option', { value: s.id }, s.name)),
     );
-    select.value = keep;
+    const next = choices.find((s) => s.id === selection.id) ?? choices[0];
+    select.value = next.id;
+    if (next !== selection) {
+      selection = next;
+      onPick(next);
+    }
   };
   fill();
   onSBoxesChanged(fill);
   select.addEventListener('change', () => {
-    if (select.value === currentId) return;
-    currentId = select.value;
-    onPick(current());
+    if (select.value === selection.id) return;
+    selection = allSBoxes().find((s) => s.id === select.value)!;
+    onPick(selection);
   });
-  const current = (): SBox => allSBoxes().find((s) => s.id === currentId)!;
+  const current = (): SBox => selection;
   const root = h(
     'div',
     { class: 'control' },

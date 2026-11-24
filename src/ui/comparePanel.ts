@@ -165,7 +165,7 @@ export function renderComparePanel(root: HTMLElement): void {
       }
       if (!r.permutation) {
         editorOut.append(
-          note('caveat', 'Not a permutation: two inputs share an output, so this S-box cannot be inverted and a cipher could not decrypt through it. Nonlinearity, δ and degree are still defined for it and shown; the permutation-only degree bound n − 1 is withheld.'),
+          note('caveat', 'Not a permutation: two inputs share an output, so this S-box cannot be inverted as a standalone substitution layer. Nonlinearity, δ and degree are still defined for it and shown; the permutation-only degree bound n − 1 is withheld.'),
         );
       }
       editorOut.append(
@@ -202,7 +202,7 @@ export function renderComparePanel(root: HTMLElement): void {
     h(
       'p',
       {},
-      'The editor starts from an affine 4-bit map, S(x) = rotl(x, 1) ⊕ 3: rotation is linear, so every metric is as bad as it can be. Change one or two entries and press Analyse — watch nonlinearity leave zero. Any 2^n hex entries with n ≤ 8 are accepted.',
+      'The editor starts from an affine 4-bit map, S(x) = rotl(x, 1) ⊕ 3: rotation is linear, so every metric is as bad as it can be. Change two entries and press Analyse. Does the degree change? Does any output mask still give an affine component and keep the overall nonlinearity at zero? Any 2^n hex entries with n ≤ 8 are accepted.',
     ),
     h(
       'div',

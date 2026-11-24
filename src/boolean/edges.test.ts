@@ -6,6 +6,13 @@ import { recoverKey, encryptToy, invert } from './toycipher';
 import { SBoxError, validateSBox } from './types';
 
 describe('F. Fail-closed edge cases', () => {
+  it('both one-bit permutations have degree one and meet the stated upper bound', () => {
+    for (const table of [[0, 1], [1, 0]]) {
+      const r = analyse(validateSBox('bit', 'One bit', 1, 1, table));
+      expect(r.degree.value).toBe(1);
+      expect(r.degree.bound).toBe(1);
+    }
+  });
   it('a constant S-box: NL 0 and δ = 2^n, flagged constant', () => {
     const r = analyse(validateSBox('c', 'constant', 4, 4, new Array(16).fill(5)));
     expect(r.constant).toBe(true);

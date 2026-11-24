@@ -22,7 +22,7 @@ export function renderDegreePanel(root: HTMLElement): void {
     panelIntro(
       'Algebraic degree: how tangled the output bits are',
       'Every output bit of an S-box can be written as an XOR of products of input bits — its algebraic normal form (ANF). A product of k input bits is a degree-k term. The degree of the S-box is the largest term any output bit needs.',
-      'Degree 1 means every output bit is a plain XOR of input bits: the S-box is affine and adds nothing a linear-algebra attack cannot undo. A permutation of n bits can reach degree n − 1 at most.',
+      'At degree 1, each output bit is an XOR of selected input bits and a constant. For permutations on two or more bits the degree is at most n − 1. A one-bit permutation has degree 1.',
     ),
   );
   const coordSel = h('select', { id: 'deg-coord', class: 'select' }) as HTMLSelectElement;

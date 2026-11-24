@@ -20,7 +20,7 @@ Everything is hand-rolled TypeScript: GF(2^n) arithmetic, the fast Walsh–Hadam
 
 ## Exhibits
 
-1. **What an S-box must do.** Two 4-bit permutations that both look like random shuffles; one is affine. Measuring them is the only way to tell.
+1. **What an S-box must do.** Two 4-bit permutations that both look like random shuffles; one is affine. Predict the affine component’s nonlinearity, then measure both tables.
 2. **Walsh spectrum.** Pick an S-box and an output mask; the full spectrum drawn with every maximum marked by a shape as well as a colour; NL computed with its formula on screen; a hand count of one coefficient (agreements minus disagreements, with the bit strip for n ≤ 5) compared with the butterfly's answer.
 3. **Difference table.** One row as a heat table with the number in every cell, δ and where it occurs, and the actual input pairs behind the largest cell recomputed pair by pair. The whole table for 4-bit S-boxes.
 4. **Algebraic degree.** Degree per output bit, the ANF written out for n ≤ 5, and a stage-by-stage Möbius stepper that ends in the ANF.

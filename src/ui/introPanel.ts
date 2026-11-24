@@ -7,13 +7,13 @@ export function renderIntroPanel(root: HTMLElement): void {
   root.append(
     panelIntro(
       'What an S-box must do',
-      'A block cipher is mostly shuffling and XOR — operations a computer can undo with linear algebra. The S-box is the one part that is not: a small lookup table that scrambles a few bits at a time. Claude Shannon called this job confusion.',
-      'Looking scrambled is not the same as being scrambled. Below are two 4-bit S-boxes. Both are permutations of 0 … f, and both look like random shuffles. One of them is affine — a disguised XOR — and an attacker can predict its output perfectly.',
+      'In AES, byte substitution introduces nonlinearity. Its S-box is a small lookup table that maps each input byte to an output byte.',
+      'Looking scrambled is not the same as being scrambled. Below are two 4-bit S-boxes. Both are permutations of 0 … f, and both look like random shuffles. One of them is affine — a disguised XOR — and each output bit is an XOR of selected input bits and a constant.',
     ),
   );
   const a = validateSBox('i-aff', 'S-box A', 4, 4, affineStartTable());
   const b = validateSBox('i-inv', 'S-box B', 4, 4, inverse4Table());
-  const out = h('div', { class: 'output' });
+  const out = h('div', { class: 'output', role: 'status' });
   const btn = h('button', { class: 'btn btn-primary', type: 'button', id: 'intro-measure' }, 'Measure them') as HTMLButtonElement;
   btn.addEventListener('click', () => {
     clear(out);
@@ -32,7 +32,7 @@ export function renderIntroPanel(root: HTMLElement): void {
     out.append(
       note(
         'info',
-        'S-box A is S(x) = rotl(x, 1) ⊕ 3. S-box B is inversion in GF(2⁴), the same construction AES uses on 8 bits. Nothing in the tables themselves told you which was which — only the measurements did.',
+        'S-box A is S(x) = rotl(x, 1) ⊕ 3. An affine component agrees with an affine guess at every input, so its nonlinearity is zero. S-box B uses inversion in GF(2⁴). The AES S-box uses inversion in GF(2⁸) followed by an affine transformation.',
       ),
     );
   });
@@ -43,6 +43,7 @@ export function renderIntroPanel(root: HTMLElement): void {
       h('div', { class: 'sig-card' }, h('h3', {}, 'S-box A'), h('code', { class: 'field-value' }, formatTable(a.table, 1))),
       h('div', { class: 'sig-card' }, h('h3', {}, 'S-box B'), h('code', { class: 'field-value' }, formatTable(b.table, 1))),
     ),
+    h('p', {}, 'Predict before measuring: if a component is affine, how many entries must change before it agrees exactly with an affine function?'),
     h('div', { class: 'action-row spaced' }, btn),
     out,
     h('h3', {}, 'The three numbers this bench measures'),
